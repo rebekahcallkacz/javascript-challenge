@@ -42,15 +42,19 @@ function generateTable(data){
 // Generate initial table with all data
 generateTable(tableData);
 
-// Select the button
-var button = d3.select('#filter-btn');
+// Select the filter button
+var filterButton = d3.select('#filter-btn');
 
 // Select the form(s)
 var form = d3.select('#form');
 
+// Select the clear filter button
+var clearFilterButton = d3.select('#refresh-btn');
+
 // Create event handlers
-button.on('click', runEnter);
+filterButton.on('click', runEnter);
 form.on('submit', runEnter);
+clearFilterButton.on('click', clearFilters)
 
 // Function that filters data based on user input
 function runEnter() {
@@ -70,6 +74,9 @@ function runEnter() {
 
     // Generate new table with filtered data
     generateTable(filteredData);
+};
 
-
+// Function that clears filters and returns all data
+function clearFilters() {
+    generateTable(tableData);
 };
