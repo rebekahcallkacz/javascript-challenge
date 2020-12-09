@@ -62,17 +62,48 @@ function runEnter() {
     // Turn off default functions - prevent page from refreshing
     d3.event.preventDefault();
 
+    // Set up variable for filtered data
+    let filteredData = tableData; 
+
+    // Filter based on user input related to datetime 
     // Select the datetime form
     let datetimeElement = d3.select('#datetime');
-    let cityElement = d3.select('#city');
 
     // Select the user input from the datetime form
     let date_input = datetimeElement.property('value');
-    let city_input = cityElement.property('value').toLowerCase()
-    let filteredData = tableData
-    if (city_input === '') {filteredData = tableData.filter(sighting => sighting.datetime === date_input);} else {
-        filteredData = tableData.filter(sighting => sighting.datetime === date_input && sighting.city === city_input);
-        }
+
+    // Only use user input if it is valid 
+    // NEED TO ADD USER NOTIFICATIONS WHICH GO INTO HTML
+    // Check for user input, if no input, inform the user
+    if (date_input === '') {console.log('You did not enter a date.');} 
+    else {
+        let dateData = tableData.filter(sighting => sighting.datetime === date_input);
+        // Check for matches. If none, inform user.
+        if (dateData.length === 0) {console.log(`There were no matches for your search ${date_input}`);}
+        // If there are matches, use this filtered data
+        else {filteredData = dateData;}
+    }
+
+    // Filter based on user input related to city 
+    // Select the city form
+    let cityElement = d3.select('#city');
+
+    // Select the user input from the datetime form
+    let city_input = cityElement.property('value').toLowerCase();
+
+    // Only use user input if it is valid 
+    // NEED TO ADD USER NOTIFICATIONS WHICH GO INTO HTML
+    // Check for user input, if no input, inform the user
+    if (city_input === '') {console.log('You did not enter a city.');} 
+    else {
+        let cityData = tableData.filter(sighting => sighting.city === city_input);
+        // Check for matches. If none, inform user.
+        if (cityData.length === 0) {console.log(`There were no matches for your search ${city_input}`);}
+        // If there are matches, use this filtered data
+        else {filteredData = filteredData.filter(sighting => sighting.city === city_input);}
+    }
+
+    //finalData = filteredData.filter(sighting => sighting.city === city_input);
 
     // Clear table data
     tableHTML.html('');
