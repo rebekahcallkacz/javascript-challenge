@@ -64,10 +64,15 @@ function runEnter() {
 
     // Select the datetime form
     let datetimeElement = d3.select('#datetime');
+    let cityElement = d3.select('#city');
 
     // Select the user input from the datetime form
-    let date = datetimeElement.property('value');
-    let filteredData = tableData.filter(sighting => sighting.datetime === date);
+    let date_input = datetimeElement.property('value');
+    let city_input = cityElement.property('value').toLowerCase()
+    let filteredData = tableData
+    if (city_input === '') {filteredData = tableData.filter(sighting => sighting.datetime === date_input);} else {
+        filteredData = tableData.filter(sighting => sighting.datetime === date_input && sighting.city === city_input);
+        }
 
     // Clear table data
     tableHTML.html('');
