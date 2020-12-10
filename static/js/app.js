@@ -149,4 +149,5 @@ function activateToast(){
                 </div>
             </div>`;
     d3.select('.toast-spot').html(toast_html);
+
 }
