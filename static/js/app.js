@@ -126,6 +126,7 @@ function runEnter() {
     // If no results returned, notify user.
     else {
         // Notify user of no search results
+        activateToast();
         console.log('no results')
     }
 };
@@ -136,13 +137,16 @@ function clearFilters() {
 };
 
 // Function that activates toast
-let toast_html = `<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 100px;">
+function activateToast(){
+    let toast_html = `<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 100px;">
                 <div class="toast" id="no-results" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header">
-                        <strong class="mr-auto">No results found.</strong>
                         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+                    <h2 class="mr-auto">No results found.</h2>
                 </div>
-            </div>`
+            </div>`;
+    d3.select('.toast-spot').html(toast_html);
+}
