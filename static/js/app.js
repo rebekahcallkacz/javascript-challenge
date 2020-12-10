@@ -54,7 +54,7 @@ var clearFilterButton = d3.select('#refresh-btn');
 // Create event handlers
 filterButton.on('click', runEnter);
 form.on('submit', runEnter);
-clearFilterButton.on('click', clearFilters)
+clearFilterButton.on('click', clearFilters);
 
 // Function that filters data based on user input
 function runEnter() {
@@ -62,57 +62,87 @@ function runEnter() {
     // Turn off default functions - prevent page from refreshing
     d3.event.preventDefault();
 
-    // Set up variable for filtered data
-    let filteredData = tableData; 
+    // Declare variable for table data
+    let filteredData = tableData
 
     // Filter based on user input related to datetime 
-    // Select the datetime form
-    let datetimeElement = d3.select('#datetime');
+    // Select the datetime value
+    let date_input = d3.select('#datetime').property('value');
 
-    // Select the user input from the datetime form
-    let date_input = datetimeElement.property('value');
-
-    // Only use user input if it is valid 
-    // NEED TO ADD USER NOTIFICATIONS WHICH GO INTO HTML
-    // Check for user input, if no input, inform the user
-    if (date_input === '') {console.log('You did not enter a date.');} 
-    else {
-        let dateData = tableData.filter(sighting => sighting.datetime === date_input);
-        // Check for matches. If none, inform user.
-        if (dateData.length === 0) {console.log(`There were no matches for your search ${date_input}`);}
-        // If there are matches, use this filtered data
-        else {filteredData = dateData;}
-    }
+    // Check for user input
+    if (date_input.length > 0) {
+        // If there is user input, use it to filter data
+        filteredData = tableData.filter(sighting => sighting.datetime === date_input);
+    } 
 
     // Filter based on user input related to city 
-    // Select the city form
-    let cityElement = d3.select('#city');
+    // Select the city value
+    let city_input = d3.select('#city').property('value').toLowerCase();
 
-    // Select the user input from the datetime form
-    let city_input = cityElement.property('value').toLowerCase();
+    // Check for user input
+    if (city_input.length > 0) {
+        // If there user input, use it to filter data
+        filteredData = filteredData.filter(sighting => sighting.city === city_input);
+    } 
+    
+    // Filter based on user input related to state 
+    // Select the city value
+    let state_input = d3.select('#state').property('value').toLowerCase();
 
-    // Only use user input if it is valid 
-    // NEED TO ADD USER NOTIFICATIONS WHICH GO INTO HTML
-    // Check for user input, if no input, inform the user
-    if (city_input === '') {console.log('You did not enter a city.');} 
-    else {
-        let cityData = tableData.filter(sighting => sighting.city === city_input);
-        // Check for matches. If none, inform user.
-        if (cityData.length === 0) {console.log(`There were no matches for your search ${city_input}`);}
-        // If there are matches, use this filtered data
-        else {filteredData = filteredData.filter(sighting => sighting.city === city_input);}
+    // Check for user input
+    if (state_input.length > 0) {
+        // If there user input, use it to filter data
+        filteredData = filteredData.filter(sighting => sighting.state === state_input);
     }
+    
+    // Filter based on user input related to country 
+    // Select the country selection
+    let country_input = d3.select('#inlineFormCustomSelect').property('value');
 
-    //finalData = filteredData.filter(sighting => sighting.city === city_input);
+    // Check for user input
+    if (country_input !== 'no-filter' & country_input !== 'Country') {
+        // If there user input, use it to filter data
+        filteredData = filteredData.filter(sighting => sighting.country === country_input);
+    } 
+
+    // Filter based on user input related to shape
+    // Select the shape value
+    let shape_input = d3.select('#shape').property('value').toLowerCase();
+
+    // Check for user input
+    if (shape_input.length > 0) {
+        // If there user input, use it to filter data
+        filteredData = filteredData.filter(sighting => sighting.shape === shape_input);
+    } 
 
     // Clear table data
     tableHTML.html('');
 
-    // Generate new table with filtered data
-    generateTable(filteredData);
+    // Check if results were returned. 
+    if (filteredData.length > 0) {
+        // If results were returned, display them in the table.
+        generateTable(filteredData);
+    }
+    // If no results returned, notify user.
+    else {
+        // Notify user of no search results
+        console.log('no results')
+    }
 };
 
 // Function that clears filters and returns all data
 function clearFilters() {
     generateTable(tableData);
 };
+
+// Function that activates toast
+let toast_html = `<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 100px;">
+                <div class="toast" id="no-results" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="mr-auto">No results found.</strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>`
