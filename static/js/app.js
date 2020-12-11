@@ -126,13 +126,14 @@ function runEnter() {
     // If no results returned, notify user.
     else {
         // Notify user of no search results
-        activateToast();
-        console.log('no results')
+        // activateToast();
+        d3.select('.toast-spot').html('<h2>No results found.</h2>')
     }
 };
 
 // Function that clears filters and returns all data
 function clearFilters() {
+    d3.select('.toast-spot').html('')
     generateTable(tableData);
 };
 
@@ -149,5 +150,5 @@ function activateToast(){
                 </div>
             </div>`;
     d3.select('.toast-spot').html(toast_html);
-
 }
+
