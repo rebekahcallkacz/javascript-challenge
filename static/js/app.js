@@ -62,9 +62,6 @@ function runEnter() {
     // Turn off default functions - prevent page from refreshing
     d3.event.preventDefault();
 
-    // Declare variable for table data
-    let filteredData = tableData
-
     // Filter based on user input related to datetime 
     // Select the datetime value
     let date_input = d3.select('#datetime').property('value');
@@ -72,7 +69,7 @@ function runEnter() {
     // Check for user input
     if (date_input.length > 0) {
         // If there is user input, use it to filter data
-        filteredData = tableData.filter(sighting => sighting.datetime === date_input);
+        var filteredData = tableData.filter(sighting => sighting.datetime === date_input);
     } 
 
     // Filter based on user input related to city 
@@ -118,6 +115,9 @@ function runEnter() {
     // Clear table data
     tableHTML.html('');
 
+    // Clear no search results
+    d3.select('.no-results-spot').html('')
+
     // Check if results were returned. 
     if (filteredData.length > 0) {
         // If results were returned, display them in the table.
@@ -127,28 +127,12 @@ function runEnter() {
     else {
         // Notify user of no search results
         // activateToast();
-        d3.select('.toast-spot').html('<h2>No results found.</h2>')
+        d3.select('.no-results-spot').html('<h2>No results found.</h2>')
     }
 };
 
 // Function that clears filters and returns all data
 function clearFilters() {
-    d3.select('.toast-spot').html('')
+    d3.select('.no-results-spot').html('');
     generateTable(tableData);
 };
-
-// Function that activates toast
-function activateToast(){
-    let toast_html = `<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 100px;">
-                <div class="toast" id="no-results" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <h2 class="mr-auto">No results found.</h2>
-                </div>
-            </div>`;
-    d3.select('.toast-spot').html(toast_html);
-}
-
