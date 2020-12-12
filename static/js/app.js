@@ -62,6 +62,8 @@ function runEnter() {
     // Turn off default functions - prevent page from refreshing
     d3.event.preventDefault();
 
+    // Define filteredData variable
+    let filteredData = tableData
     // Filter based on user input related to datetime 
     // Select the datetime value
     let date_input = d3.select('#datetime').property('value');
@@ -69,7 +71,7 @@ function runEnter() {
     // Check for user input
     if (date_input.length > 0) {
         // If there is user input, use it to filter data
-        var filteredData = tableData.filter(sighting => sighting.datetime === date_input);
+        filteredData = filteredData.filter(sighting => sighting.datetime === date_input);
     } 
 
     // Filter based on user input related to city 
